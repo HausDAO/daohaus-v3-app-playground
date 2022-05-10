@@ -24,6 +24,8 @@ const NetworkList = () => {
     setSortedDaos({ networkDaos, count });
   }, [userHubDaos]);
 
+  console.log('sortedDaos', sortedDaos);
+
   const handleChange = event => {
     setSearchTerm(event.target.value);
   };
@@ -51,9 +53,6 @@ const NetworkList = () => {
             <Icon boxSize={10} as={BsFillCircleFill} color='grey' mr={5} />
             <TextBox size='sm'>your DAOs will show here</TextBox>
           </Flex>
-          <TextBox as={RouterLink} to='/explore'>
-            Explore DAOs
-          </TextBox>
         </>
       )}
       {sortedDaos.networkDaos?.length > 0 && (

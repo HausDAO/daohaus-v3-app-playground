@@ -81,7 +81,10 @@ export const handleGetENS = async address => {
 
 export const lookupENS = async ens => {
   try {
-    const ethersProvider = ethers.getDefaultProvider(chainByID('0x1').rpc_url);
+    const ethersProvider = ethers.getDefaultProvider(
+      `https://${process.env.REACT_APP_RPC_URI}.eth.rpc.rivet.cloud/`,
+    );
+
     const address = await ethersProvider.resolveName(ens);
     return address;
   } catch (error) {

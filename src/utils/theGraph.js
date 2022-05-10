@@ -18,7 +18,6 @@ import {
   SNAPSHOT_VOTES_QUERY,
 } from '../graphQL/snapshot-queries';
 import { getGraphEndpoint, supportedChains } from './chain';
-import { omit } from './general';
 import { isModuleEnabled } from './gnosis';
 import { getApiMetadata, fetchApiVaultData, fetchMetaData } from './metadata';
 import {
@@ -513,18 +512,8 @@ export const hubChainQuery = async ({
   supportedChains,
   endpointType,
   reactSetter,
-  apiFetcher,
   variables,
-  setApiData,
 }) => {
-  const metaDataMap = await apiFetcher();
-  setApiData(metaDataMap);
-
-  const daoMapLookup = (address, chainName) => {
-    const daoMatch = metaDataMap[address] || [];
-
-    return daoMatch.find(dao => dao.network === chainName) || null;
-  };
   buildCrossChainQuery(supportedChains, endpointType).forEach(async chain => {
     try {
       const chainData = await graphQuery({
@@ -532,43 +521,12 @@ export const hubChainQuery = async ({
         query,
         variables,
       });
-      const withMetaData = chainData?.membersHub
-        .map(dao => {
-          const withResolvedProposals = {
-            ...dao,
-            moloch: {
-              ...omit('proposals', dao.moloch),
-              proposals: dao.moloch.proposals.map(proposal =>
-                proposalResolver(proposal, {
-                  proposalType: true,
-                  description: true,
-                  title: true,
-                  activityFeed: true,
-                }),
-              ),
-            },
-          };
 
-          return {
-            ...withResolvedProposals,
-            meta: daoMapLookup(dao?.moloch?.id, chain.apiMatch),
-          };
-        })
-        .filter(dao => {
-          const notHiddenAndHasMetaOrIsUnregisteredSummoner =
-            (dao.meta && !dao.meta.hide) ||
-            (!dao.meta &&
-              variables.memberAddress.toLowerCase() === dao.moloch.summoner);
-
-          const hasNoSharesLoot =
-            Number(dao.shares) > 0 || Number(dao.loot) > 0;
-
-          return notHiddenAndHasMetaOrIsUnregisteredSummoner && hasNoSharesLoot;
-        });
+      console.log('chainData', chainData);
 
       reactSetter(prevState => [
         ...prevState,
-        { ...chain, data: withMetaData },
+        { ...chain, data: chainData.membersHub },
       ]);
     } catch (error) {
       console.error(error);

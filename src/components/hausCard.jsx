@@ -83,7 +83,10 @@ const HausCard = ({ hideLink = false }) => {
         startBlockNo: HAUS_MAINNET_START_BLOCKNO,
       });
       const mainnetProvider = new Web3(
-        new Web3.providers.HttpProvider(chainByID('0x1').rpc_url),
+        // new Web3.providers.HttpProvider(chainByID('0x1').rpc_url),
+        new Web3.providers.HttpProvider(
+          `https://${process.env.REACT_APP_RPC_URI}.eth.rpc.rivet.cloud/`,
+        ),
       );
       const dater = new ETHDater(mainnetProvider);
       const startBlockInfo0x1 = await dater.getDate(startDate);

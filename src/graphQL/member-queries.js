@@ -15,66 +15,18 @@ export const USER_MEMBERSHIPS = gql`
 
 export const HUB_MEMBERSHIPS = gql`
   query membersHub($memberAddress: String!) {
-    membersHub: members(
-      where: { memberAddress: $memberAddress, exists: true }
-    ) {
+    membersHub: members(where: { memberAddress: $memberAddress }) {
       id
+      createdAt
       memberAddress
-      molochAddress
+      delegatingTo
+      delegateShares
       shares
       loot
-      moloch {
+      dao {
         id
-        version
-        summoner
-        proposals(orderBy: proposalId, orderDirection: desc, first: 10) {
-          id
-          createdAt
-          proposalId
-          proposalIndex
-          proposer
-          processed
-          processor
-          sponsored
-          sponsor
-          sponsoredAt
-          details
-          newMember
-          whitelist
-          guildkick
-          trade
-          cancelled
-          aborted
-          votingPeriodStarts
-          votingPeriodEnds
-          gracePeriodEnds
-          molochAddress
-          molochVersion
-          yesVotes
-          noVotes
-          votes(where: { memberAddress: $memberAddress }) {
-            id
-            memberAddress
-          }
-        }
-        rageQuits {
-          id
-          createdAt
-          shares
-          loot
-          memberAddress
-          molochAddress
-        }
-      }
-      tokenBalances {
-        tokenBalance
-        moloch {
-          id
-        }
-        token {
-          tokenAddress
-          symbol
-          decimals
+        metaData {
+          name
         }
       }
     }

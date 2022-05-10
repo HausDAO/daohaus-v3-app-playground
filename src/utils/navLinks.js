@@ -30,13 +30,13 @@ export const defaultDaoData = [
   { icon: FaRegHandshake, label: 'Allies', path: 'allies' },
 ];
 export const defaultHubData = [
-  { icon: RiSearch2Line, label: 'Explore', path: '/explore' },
-  { icon: RiFireLine, label: 'Summon', path: '/summon' },
-  {
-    icon: RiQuestionLine,
-    label: 'Help',
-    href: 'https://daohaus.club/docs',
-  },
+  // { icon: RiSearch2Line, label: 'Explore', path: '/explore' },
+  // { icon: RiFireLine, label: 'Summon', path: '/summon' },
+  // {
+  //   icon: RiQuestionLine,
+  //   label: 'Help',
+  //   href: 'https://daohaus.club/docs',
+  // },
 ];
 
 export const generateDaoLinks = (chainID, daoID, proposals, vaults) => {

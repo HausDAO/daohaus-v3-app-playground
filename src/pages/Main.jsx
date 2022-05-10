@@ -9,24 +9,12 @@ import HubSignedOut from '../components/hubSignedOut';
 import MainViewLayout from '../components/mainViewLayout';
 import NewsFeed from '../components/newsFeed';
 import NetworkList from '../components/networkList';
-import HausCard from '../components/hausCard';
 
 const Main = () => {
   const { address } = useInjectedProvider();
-  const { userHubDaos } = useUser();
-
-  const hasDaos = () => {
-    return userHubDaos.some(network => network.data.length);
-  };
-
-  const ctaButton = (
-    <Button as='a' href='https://3box.io/hub' target='_blank' variant='outline'>
-      Edit 3Box Profile
-    </Button>
-  );
 
   return (
-    <MainViewLayout header='Hub' headerEl={address ? ctaButton : null}>
+    <MainViewLayout header='Hub'>
       <Flex wrap='wrap'>
         <Box
           w={['100%', null, null, null, '60%']}
@@ -42,13 +30,6 @@ const Main = () => {
             <HubSignedOut />
           )}
         </Box>
-        {address && (
-          <Box w={['100%', null, null, null, '40%']}>
-            <HausCard />
-
-            {hasDaos() ? <NewsFeed /> : <FeaturedDaos />}
-          </Box>
-        )}
       </Flex>
     </MainViewLayout>
   );

@@ -83,13 +83,6 @@ const HubProfileCard = ({ address }) => {
           <Box fontSize='sm' mt={4} fontFamily='mono'>
             {profile?.description}
           </Box>
-          <Box fontSize='sm' mt={4}>
-            {location.pathname === '/hub-balances/' ? (
-              <Link to='/'>View hub</Link>
-            ) : (
-              <Link to='/hub-balances/'>View internal DAO balances</Link>
-            )}
-          </Box>
         </>
       ) : null}
     </>

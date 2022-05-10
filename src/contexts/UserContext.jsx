@@ -14,7 +14,6 @@ import { HUB_MEMBERSHIPS } from '../graphQL/member-queries';
 import { createPoll } from '../services/pollService';
 import { hubChainQuery } from '../utils/theGraph';
 import { supportedChains } from '../utils/chain';
-import { getApiMetadata } from '../utils/metadata';
 import { handleGetProfile } from '../utils/3box';
 
 const numOfSupportedChains = Object.keys(supportedChains).length;
@@ -40,7 +39,6 @@ export const UserContextProvider = ({ children }) => {
         query: HUB_MEMBERSHIPS,
         supportedChains,
         endpointType: 'subgraph_url',
-        apiFetcher: getApiMetadata,
         reactSetter: setUserHubDaos,
         setApiData,
         variables: {
