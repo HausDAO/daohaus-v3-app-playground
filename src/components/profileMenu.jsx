@@ -217,7 +217,7 @@ const ProfileMenu = ({ member, refreshProfile }) => {
         {address === member.memberAddress && (
           <MenuItem onClick={handleEditProfile}>Edit Profile</MenuItem>
         )}
-        {canInteract ? (
+        {/* {canInteract ? (
           <>
             {isMember && hasSharesOrLoot && (
               <MenuItem onClick={handleRageQuitClick}>RageQuit</MenuItem>
@@ -237,7 +237,7 @@ const ProfileMenu = ({ member, refreshProfile }) => {
               <MenuItem onClick={handleRageKick}>RageKick</MenuItem>
             )}
           </>
-        ) : null}
+        ) : null} */}
       </MenuList>
     </Menu>
   );

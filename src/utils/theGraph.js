@@ -319,8 +319,6 @@ const completeQueries = {
         },
       });
 
-      console.log('graphOverview', graphOverview);
-
       setter({
         ...graphOverview.dao,
       });
@@ -339,8 +337,6 @@ const completeQueries = {
         },
       });
 
-      console.log('graphProposals', graphProposals);
-
       setter(graphProposals);
     } catch (error) {
       console.error(error);
@@ -356,8 +352,6 @@ const completeQueries = {
           contractAddr: args.daoID,
         },
       });
-
-      console.log('graphMembers', graphMembers);
 
       setter(graphMembers);
     } catch (error) {

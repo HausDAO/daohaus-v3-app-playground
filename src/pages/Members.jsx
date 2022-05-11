@@ -59,7 +59,6 @@ const Members = React.memo(({ members, overview, daoMembers }) => {
   useEffect(() => {
     if (!selectedMember && address && members.length) {
       const loggedInMember = members.find(m => m.memberAddress === address);
-      console.log('loggedInMember', loggedInMember);
       setSelectedMember(loggedInMember || members[0]);
     }
   }, [members, address, selectedMember]);

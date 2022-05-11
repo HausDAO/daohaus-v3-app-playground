@@ -14,10 +14,10 @@ import { useDao } from '../contexts/DaoContext';
 
 import Layout from '../components/layout';
 import Members from '../pages/Members';
+import Overview from '../pages/Overview';
+import Profile from '../pages/Profile';
 // import Meta from '../pages/Meta';
 // import MetaAudit from '../pages/MetaAudit';
-import Overview from '../pages/Overview';
-// import Profile from '../pages/Profile';
 // import Proposal from '../pages/Proposal';
 // import Proposals from '../pages/Proposals';
 // import Settings from '../pages/Settings';
@@ -62,6 +62,16 @@ const DaoRouter = () => {
             members={daoMembers}
             overview={daoOverview}
             daoMembers={daoMembers}
+          />
+        </Route>
+
+        <Route exact path={`${path}/profile/:userid`}>
+          <Profile
+            members={daoMembers}
+            overview={daoOverview}
+            // daoTokens={currentDaoTokens}
+            // activities={daoActivities}
+            // daoMember={daoMember}
           />
         </Route>
         {/* <Route exact path={`${path}/proposals`}>
@@ -115,15 +125,7 @@ const DaoRouter = () => {
             delegate={delegate}
           />
         </Route>
-        <Route exact path={`${path}/profile/:userid`}>
-          <Profile
-            members={daoMembers}
-            overview={daoOverview}
-            daoTokens={currentDaoTokens}
-            activities={daoActivities}
-            daoMember={daoMember}
-          />
-        </Route> */}
+         */}
       </Switch>
     </Layout>
   );

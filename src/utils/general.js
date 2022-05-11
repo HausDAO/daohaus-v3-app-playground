@@ -271,8 +271,8 @@ export const isEthAddress = string =>
     : false;
 
 export const isDelegating = member => {
-  if (member?.memberAddress && member?.delegateKey) {
-    return member?.memberAddress !== member?.delegateKey;
+  if (member?.memberAddress && member?.delegatingTo) {
+    return member?.delegatingTo !== member?.delegatingTo;
   }
 };
 export const checkIfUserIsDelegate = (address, daoMembers) => {

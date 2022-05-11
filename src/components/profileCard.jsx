@@ -12,6 +12,7 @@ import {
 } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
 import { format } from 'date-fns';
+import { utils } from 'ethers';
 
 import ContentBox from './ContentBox';
 import ProfileMenu from './profileMenu';
@@ -72,7 +73,7 @@ const ProfileCard = ({
     return profile?.name ? profile.name : truncateAddr(userid);
   };
 
-  // console.log(memberEntity);
+  console.log(memberEntity);
   return (
     <ContentBox>
       {userid ? (
@@ -132,7 +133,7 @@ const ProfileCard = ({
           >
             <Flex justify='space-between'>
               <Box>
-                <TextBox size='sm'>
+                {/* <TextBox size='sm'>
                   Exit Amount
                   <Tooltip
                     hasArrow
@@ -150,7 +151,7 @@ const ProfileCard = ({
                     numberWithCommas(
                       calcValue(memberEntity, daoTokens, overview),
                     )}
-                </TextBox>
+                </TextBox> */}
               </Box>
               <Box>
                 {memberEntity && (
@@ -166,7 +167,9 @@ const ProfileCard = ({
                 <TextBox size='xs'>Power</TextBox>
                 <Skeleton isLoaded={profile || memberEntity}>
                   <TextBox size='xl' variant='value'>
-                    {daoTokens && overview && calcPower(memberEntity, overview)}
+                    {memberEntity &&
+                      overview &&
+                      calcPower(memberEntity, overview)}
                     %
                   </TextBox>
                 </Skeleton>
@@ -175,7 +178,7 @@ const ProfileCard = ({
                 <TextBox size='xs'>Shares</TextBox>
                 <Skeleton isLoaded={!memberEntity || memberEntity?.shares >= 0}>
                   <TextBox size='xl' variant='value'>
-                    {memberEntity?.shares || '0'}
+                    {utils.formatEther(memberEntity?.shares || 0)}
                   </TextBox>
                 </Skeleton>
               </Box>
@@ -183,7 +186,7 @@ const ProfileCard = ({
                 <TextBox size='xs'>Loot</TextBox>
                 <Skeleton isLoaded={!memberEntity || memberEntity?.loot >= 0}>
                   <TextBox size='xl' variant='value'>
-                    {memberEntity?.loot || '0'}
+                    {utils.formatEther(memberEntity?.loot || 0)}
                   </TextBox>
                 </Skeleton>
               </Box>
@@ -193,35 +196,9 @@ const ProfileCard = ({
             <TextBox size='xs' mt={3}>
               <Box>Is delegating power to</Box>
               <Link color='secondary.300' href='/'>
-                {truncateAddr(memberEntity?.delegateKey)}
+                {truncateAddr(memberEntity?.delegatingTo)}
               </Link>
             </TextBox>
-          )}
-
-          {memberEntity && memberEntity.isUberMinion && (
-            <Flex direction='column' width='100%'>
-              <TextBox size='xs' mt={5} mb={3}>
-                This is the UberHaus Minion for
-              </TextBox>
-              <Flex direction='row' justifyContent='space-between'>
-                <UberHausMemberAvatar
-                  addr={memberEntity.uberMinion.molochAddress}
-                  metadata={memberEntity.uberMeta}
-                  hideCopy
-                  alwaysShowName
-                />
-                <RouterLink
-                  to={`/dao/${UBERHAUS_DATA.NETWORK}/${memberEntity.uberMinion.molochAddress}`}
-                >
-                  <Icon
-                    as={RiLoginBoxLine}
-                    color='secondary.500'
-                    h='25px'
-                    w='25px'
-                  />
-                </RouterLink>
-              </Flex>
-            </Flex>
           )}
         </Flex>
       ) : null}

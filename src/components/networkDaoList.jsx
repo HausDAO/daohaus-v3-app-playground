@@ -21,7 +21,6 @@ import { themeImagePath } from '../utils/metadata';
 import { truncateAddr } from '../utils/general';
 
 const LinkForVersion = ({ children, dao, network }) => {
-  console.log('network', network);
   return (
     <Link
       as={RouterLink}

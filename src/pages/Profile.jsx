@@ -74,7 +74,7 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
     <MainViewLayout header='Profile' isDao>
       <Flex wrap='wrap'>
         <Box
-          w={['100%', null, null, null, '60%']}
+          w={['100%', null, null, null, '100%']}
           pr={[0, null, null, null, 6]}
           pb={6}
         >
@@ -86,20 +86,11 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
             memberEntity={memberEntity}
             refreshProfile={setProfile}
           />
-          <BankList
+          {/* <BankList
             tokens={tokensReceivable}
             hasBalance={hasBalance()}
             profile
-          />
-        </Box>
-        <Box w={['100%', null, null, null, '40%']}>
-          {activities && memberEntity && (
-            <ActivitiesFeed
-              limit={5}
-              hydrateFn={getProfileActivites(memberEntity.memberAddress)}
-              activities={activities}
-            />
-          )}
+          /> */}
         </Box>
       </Flex>
     </MainViewLayout>

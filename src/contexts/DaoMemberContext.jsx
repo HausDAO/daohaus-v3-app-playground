@@ -24,7 +24,6 @@ export const DaoMemberProvider = ({ daoMembers, address, children }) => {
 
     if (daoMembers) {
       if (currentMemberRef.current !== address) {
-        console.log('daoMembers', daoMembers);
         const currentMember = checkForMember(daoMembers);
 
         if (currentMember) {
