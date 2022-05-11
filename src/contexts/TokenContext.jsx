@@ -17,7 +17,7 @@ export const TokenProvider = ({ children }) => {
   // as props and React.memo the data.
   const { daoOverview } = useDao();
 
-  const { daochain } = useParams();
+  // const { daochain } = useParams();
   const [tokenPrices, setTokenPrices] = useState(null);
   const [currentDaoTokens, setCurrentDaoTokens] = useState(null);
 
@@ -25,48 +25,48 @@ export const TokenProvider = ({ children }) => {
   const shouldFetchContract = useRef(true);
 
   // first fetch API USD values to get fast bank balance
-  useEffect(() => {
-    const initDaoTokens = async () => {
-      const newDaoData = await initTokenData(
-        daochain,
-        daoOverview.tokenBalances,
-        setTokenPrices,
-      );
+  // useEffect(() => {
+  //   const initDaoTokens = async () => {
+  //     const newDaoData = await initTokenData(
+  //       daochain,
+  //       daoOverview.tokenBalances,
+  //       setTokenPrices,
+  //     );
 
-      setCurrentDaoTokens(newDaoData);
-      shouldFetchInit.current = false;
-    };
-    if (daoOverview?.tokenBalances && daochain && shouldFetchInit.current) {
-      initDaoTokens();
-    }
-  }, [daoOverview, daochain]);
+  //     setCurrentDaoTokens(newDaoData);
+  //     shouldFetchInit.current = false;
+  //   };
+  //   if (daoOverview?.tokenBalances && daochain && shouldFetchInit.current) {
+  //     initDaoTokens();
+  //   }
+  // }, [daoOverview, daochain]);
 
   // then fetch contract values for more exact amount.
-  useEffect(() => {
-    const getContractValues = async () => {
-      const withContractValues = await addContractVals(
-        currentDaoTokens,
-        daochain,
-      );
-      setCurrentDaoTokens(withContractValues);
-    };
-    if (currentDaoTokens && shouldFetchContract.current) {
-      shouldFetchContract.current = false;
-      getContractValues();
-    }
-  }, [currentDaoTokens, daochain]);
+  // useEffect(() => {
+  //   const getContractValues = async () => {
+  //     const withContractValues = await addContractVals(
+  //       currentDaoTokens,
+  //       daochain,
+  //     );
+  //     setCurrentDaoTokens(withContractValues);
+  //   };
+  //   if (currentDaoTokens && shouldFetchContract.current) {
+  //     shouldFetchContract.current = false;
+  //     getContractValues();
+  //   }
+  // }, [currentDaoTokens, daochain]);
 
-  const refetchTokens = async () => {
-    const newDaoData = await initTokenData(daochain, daoOverview.tokenBalances);
-    setCurrentDaoTokens(newDaoData);
-    shouldFetchContract.current = true;
-  };
+  // const refetchTokens = async () => {
+  //   const newDaoData = await initTokenData(daochain, daoOverview.tokenBalances);
+  //   setCurrentDaoTokens(newDaoData);
+  //   shouldFetchContract.current = true;
+  // };
 
-  const getTokenPrice = tokenAddress => {
-    if (tokenPrices && tokenAddress) {
-      return tokenPrices[tokenAddress]?.price || null;
-    }
-  };
+  // const getTokenPrice = tokenAddress => {
+  //   if (tokenPrices && tokenAddress) {
+  //     return tokenPrices[tokenAddress]?.price || null;
+  //   }
+  // };
 
   return (
     <TokenContext.Provider
@@ -75,8 +75,8 @@ export const TokenProvider = ({ children }) => {
         shouldFetchInit,
         shouldFetchContract,
         tokenPrices,
-        refetchTokens,
-        getTokenPrice,
+        // refetchTokens,
+        // getTokenPrice,
       }}
     >
       {children}

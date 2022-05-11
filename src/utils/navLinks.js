@@ -30,7 +30,7 @@ export const defaultDaoData = [
   { icon: FaRegHandshake, label: 'Allies', path: 'allies' },
 ];
 export const defaultHubData = [
-  // { icon: RiSearch2Line, label: 'Explore', path: '/explore' },
+  { icon: RiSearch2Line, label: 'Hub', path: '/' },
   // { icon: RiFireLine, label: 'Summon', path: '/summon' },
   // {
   //   icon: RiQuestionLine,

@@ -7,7 +7,6 @@ import React, {
 } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { checkIfUserIsDelegate } from '../utils/general';
 import { initMemberWallet } from '../utils/wallet';
 
 export const DaoMemberContext = createContext();
@@ -24,10 +23,11 @@ export const DaoMemberProvider = ({
   const [isMember, setIsMember] = useState(null);
 
   const currentMemberRef = useRef(false);
-  const memberWalletRef = useRef(false);
+  // const memberWalletRef = useRef(false);
 
   useEffect(() => {
     const checkForMember = daoMembers => {
+      console.log('daoMembers', daoMembers);
       return daoMembers.find(
         member => member.memberAddress === address && Number(member.shares) > 0,
       );
@@ -40,15 +40,15 @@ export const DaoMemberProvider = ({
         if (currentMember) {
           setDaoMember(currentMember);
           setIsMember(true);
-          setDelegate(false);
+          // setDelegate(false);
         } else {
-          const delegatees = checkIfUserIsDelegate(address, daoMembers);
-          if (delegatees?.length) {
-            setDelegate({
-              delegateKey: address,
-              delegatees,
-            });
-          }
+          // const delegatees = checkIfUserIsDelegate(address, daoMembers);
+          // if (delegatees?.length) {
+          //   setDelegate({
+          //     delegateKey: address,
+          //     delegatees,
+          //   });
+          // }
           setDaoMember(false);
           setIsMember(false);
         }
@@ -57,50 +57,50 @@ export const DaoMemberProvider = ({
     }
   }, [daoMembers, address]);
 
-  useEffect(() => {
-    const assembleMemberWallet = async () => {
-      try {
-        const wallet = await initMemberWallet({
-          memberAddress: address,
-          depositToken: overview.depositToken,
-          daoAddress: daoid,
-          chainID: daochain,
-        });
+  // useEffect(() => {
+  //   const assembleMemberWallet = async () => {
+  //     try {
+  //       const wallet = await initMemberWallet({
+  //         memberAddress: address,
+  //         depositToken: overview.depositToken,
+  //         daoAddress: daoid,
+  //         chainID: daochain,
+  //       });
 
-        if (wallet) {
-          if (daoMember) {
-            setDaoMember(prevState => ({
-              ...prevState,
-              ...wallet,
-              hasWallet: true,
-            }));
-          } else if (delegate) {
-            setDelegate(prevState => ({
-              ...prevState,
-              ...wallet,
-              hasWallet: true,
-            }));
-          }
-        }
-        memberWalletRef.current = address;
-      } catch (error) {
-        console.error(error);
-        memberWalletRef.current = address;
-      }
-    };
+  //       if (wallet) {
+  //         if (daoMember) {
+  //           setDaoMember(prevState => ({
+  //             ...prevState,
+  //             ...wallet,
+  //             hasWallet: true,
+  //           }));
+  //         } else if (delegate) {
+  //           setDelegate(prevState => ({
+  //             ...prevState,
+  //             ...wallet,
+  //             hasWallet: true,
+  //           }));
+  //         }
+  //       }
+  //       memberWalletRef.current = address;
+  //     } catch (error) {
+  //       console.error(error);
+  //       memberWalletRef.current = address;
+  //     }
+  //   };
 
-    const canVote = daoMember || delegate;
-    if (
-      canVote &&
-      memberWalletRef.current !== address &&
-      overview &&
-      daochain &&
-      daoid &&
-      address
-    ) {
-      assembleMemberWallet();
-    }
-  }, [daoMember, overview, daochain, daoid, delegate, address]);
+  //   const canVote = daoMember || delegate;
+  //   if (
+  //     canVote &&
+  //     memberWalletRef.current !== address &&
+  //     overview &&
+  //     daochain &&
+  //     daoid &&
+  //     address
+  //   ) {
+  //     assembleMemberWallet();
+  //   }
+  // }, [daoMember, overview, daochain, daoid, delegate, address]);
 
   return (
     <DaoMemberContext.Provider
@@ -108,7 +108,6 @@ export const DaoMemberProvider = ({
         currentMemberRef,
         isMember,
         daoMember,
-        memberWalletRef,
         delegate,
       }}
     >
@@ -117,18 +116,13 @@ export const DaoMemberProvider = ({
   );
 };
 export const useDaoMember = () => {
-  const {
-    currentMemberRef,
-    isMember,
-    daoMember,
-    memberWalletRef,
-    delegate,
-  } = useContext(DaoMemberContext);
+  const { currentMemberRef, isMember, daoMember, delegate } = useContext(
+    DaoMemberContext,
+  );
   return {
     currentMemberRef,
     isMember,
     daoMember,
-    memberWalletRef,
     delegate,
   };
 };

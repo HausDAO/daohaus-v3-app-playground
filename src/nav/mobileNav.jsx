@@ -11,6 +11,7 @@ import NavLinkList from './navLinkList';
 import SocialsLinkList from './socialsLinkList';
 
 import '../global.css';
+import { NavLink } from 'react-router-dom';
 
 const MobileNav = ({ dao }) => {
   const { address, requestWallet } = useInjectedProvider();
@@ -98,6 +99,23 @@ const MobileNav = ({ dao }) => {
         transition='all .25s ease-in-out'
         overflowY='auto'
       >
+        <Box mt={5}>
+          <Flex direction='row' align='center' justify='start'>
+            {/* <NavLink
+              key={link.path || link.href}
+              label={
+                dao?.customTermsConfig
+                  ? getTerm(dao.customTermsConfig, link.label)
+                  : link.label
+              }
+              path={link.path}
+              href={link.href}
+              icon={link.icon}
+              view={view}
+              onClick={toggleNav}
+            /> */}
+          </Flex>
+        </Box>
         <NavLinkList dao={dao} view='mobile' toggleNav={toggleNav} />
         <Box mt={5}>
           <Flex direction='row' align='center' justify='start'>

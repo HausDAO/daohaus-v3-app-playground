@@ -85,7 +85,6 @@ const DesktopNav = ({ dao }) => {
       <Flex direction='column' wrap='wrap'>
         <>
           <NavLinkList dao={dao} view='desktop' />
-          <Box></Box>
         </>
       </Flex>
     </Flex>

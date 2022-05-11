@@ -2,9 +2,8 @@ import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import FourOhFour from '../pages/404';
-// import Dao from '../pages/Dao';
+import Dao from '../pages/Dao';
 import Hub from '../pages/Hub';
-import Haus from '../pages/Haus';
 
 const BaseRouter = () => {
   return (
@@ -18,15 +17,12 @@ const BaseRouter = () => {
       <Route exact path='/'>
         <Hub />
       </Route>
-      <Route exact path='/haus'>
-        <Haus />
-      </Route>
-      {/* <Route
+      <Route
         path='/dao/:daochain/:daoid'
         render={routeProps => {
           return <Dao key={routeProps.match.params.daoid} {...routeProps} />;
         }}
-      /> */}
+      />
       <Route path='*' component={FourOhFour} />
     </Switch>
   );

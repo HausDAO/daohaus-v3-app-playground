@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid';
 import { useDao } from './DaoContext';
 import { useDaoMember } from './DaoMemberContext';
 import { useInjectedProvider } from './InjectedProviderContext';
-import { useMetaData } from './MetaDataContext';
+// import { useMetaData } from './MetaDataContext';
 import { useOverlay } from './OverlayContext';
 import { useToken } from './TokenContext';
 import { useUser } from './UserContext';
@@ -18,7 +18,6 @@ import {
   Transaction,
 } from '../utils/txHelpers';
 import { createPoll } from '../services/pollService';
-import { createForumTopic } from '../utils/discourse';
 import { customValidations } from '../utils/validation';
 import { supportedChains } from '../utils/chain';
 import { TX } from '../data/txLegos/contractTX';
@@ -28,23 +27,17 @@ export const TXContext = createContext();
 
 export const TXProvider = ({ children }) => {
   const { injectedProvider, address, injectedChain } = useInjectedProvider();
-  const {
-    resolvePoll,
-    cachePoll,
-    userHubDaos,
-    apiData,
-    outstandingTXs,
-  } = useUser();
+  const { resolvePoll, cachePoll, userHubDaos, outstandingTXs } = useUser();
   const {
     hasPerformedBatchQuery,
     refetch,
     daoOverview,
     daoMembers,
     daoProposals,
-    daoVaults,
-    refreshAllDaoVaults,
+    // daoVaults,
+    // refreshAllDaoVaults,
   } = useDao();
-  const { daoMetaData } = useMetaData();
+  // const { daoMetaData } = useMetaData();
   const {
     errorToast,
     successToast,
@@ -52,7 +45,7 @@ export const TXProvider = ({ children }) => {
     setModal,
     setGenericModal,
   } = useOverlay();
-  const { hasFetchedMetadata, shouldUpdateTheme } = useMetaData();
+  // const { hasFetchedMetadata, shouldUpdateTheme } = useMetaData();
   const { shouldFetchInit, shouldFetchContract, currentDaoTokens } = useToken();
   const {
     currentMemberRef,
@@ -72,7 +65,6 @@ export const TXProvider = ({ children }) => {
     daoid,
     daochain,
     minion,
-    daoMetaData,
     daoMembers,
     daoProposals,
     currentDaoTokens,
@@ -81,7 +73,7 @@ export const TXProvider = ({ children }) => {
     delegate,
     userHubDaos,
     outstandingTXs,
-    daoVaults,
+    // daoVaults,
     chainConfig,
   };
 
@@ -91,7 +83,7 @@ export const TXProvider = ({ children }) => {
     resolvePoll,
     cachePoll,
     refetch,
-    refreshAllDaoVaults,
+    // refreshAllDaoVaults,
     setTxInfoModal,
     setGenericModal,
     setModal,
@@ -107,20 +99,13 @@ export const TXProvider = ({ children }) => {
     // TokenContext
     shouldFetchInit.current = true;
     shouldFetchContract.current = true;
-    // MetadataContext
-    hasFetchedMetadata.current = false;
-    shouldUpdateTheme.current = true;
     // DaoMemberContext
     currentMemberRef.current = false;
     memberWalletRef.current = false;
     // Now, I call rerender on DaoContext, which should re-fetch all the graphQueries
     // This should get up all the up to date data from the Graph and spread across the
     // entire component tree. It should also recache the new data automatically
-    if (!skipVaults) {
-      console.log('refresh');
-      await refreshAllDaoVaults();
-      console.log('refresh done');
-    }
+
     await refetch();
     setTxClock(uuid());
   };
@@ -155,17 +140,6 @@ export const TXProvider = ({ children }) => {
           });
           lifeCycleFns?.onPollSuccess?.(txHash, data);
           resolvePoll(txHash);
-          if (tx.createDiscourse) {
-            createForumTopic({
-              chainID: daochain,
-              daoID: daoid,
-              afterTime: now,
-              proposalType: formData?.type,
-              values,
-              applicant: values?.applicant || address,
-              daoMetaData,
-            });
-          }
         },
       },
     });
@@ -177,7 +151,7 @@ export const TXProvider = ({ children }) => {
       const isError = customValidations[rule]?.({
         values,
         formData,
-        appState: { ...contextData, apiData },
+        appState: { ...contextData },
       });
       if (isError) {
         return [...arr, isError];
@@ -270,23 +244,12 @@ export const TXProvider = ({ children }) => {
       injectedProvider,
     });
 
-  const checkState = (checklist, errorDeliveryType, checkApiData) =>
-    checkApiData
-      ? handleChecklist(
-          {
-            ...contextData,
-            ...apiData,
-            injectedProvider,
-            injectedChain,
-          },
-          checklist,
-          errorDeliveryType,
-        )
-      : handleChecklist(
-          { ...contextData, injectedProvider, injectedChain },
-          checklist,
-          errorDeliveryType,
-        );
+  const checkState = (checklist, errorDeliveryType) =>
+    handleChecklist(
+      { ...contextData, injectedProvider, injectedChain },
+      checklist,
+      errorDeliveryType,
+    );
 
   return (
     <TXContext.Provider

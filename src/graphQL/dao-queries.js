@@ -1,40 +1,30 @@
 import { gql } from 'apollo-boost';
 
 export const HOME_DAO = gql`
-  query moloch($contractAddr: String!) {
-    moloch(id: $contractAddr) {
+  query dao($contractAddr: String!) {
+    dao(id: $contractAddr) {
       id
-      summoner
-      summoningTime
-      newContract
+      createdAt
+      transactionHashSummon
+      lootAddress
+      safeAddress
+      lootPaused
+      sharesPaused
+      gracePeriod
+      votingPeriod
+      proposalOffering
+      quorumPercent
+      sponsorThreshold
+      minRetentionPercent
+      shareTokenName
+      shareTokenSymbol
       totalShares
-      dilutionBound
       totalLoot
-      version
-      periodDuration
-      votingPeriodLength
-      gracePeriodLength
-      proposalDeposit
-      processingReward
-      guildBankAddress
-      minions {
-        createdAt
-        minionAddress
-        minionType
-        details
-        minQuorum
-        safeAddress
-        uberHausAddress
-        uberHausDelegate
-        uberHausDelegateRewardFactor
-        crossChainMinion
-        foreignChainId
-        foreignSafeAddress
-      }
-      depositToken {
-        tokenAddress
-        symbol
-        decimals
+      latestSponsoredProposalId
+      proposalCount
+      activeMemberCount
+      metaData {
+        name
       }
     }
   }

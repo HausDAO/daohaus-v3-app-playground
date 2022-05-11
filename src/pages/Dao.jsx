@@ -12,8 +12,8 @@ const Dao = () => {
 
   const DaoScopedModals = () => (
     <>
-      <DaoAccountModal />
-      <ProposalSelector />
+      {/* <DaoAccountModal /> */}
+      {/* <ProposalSelector /> */}
       <Modal />
     </>
   );
@@ -21,7 +21,7 @@ const Dao = () => {
   return (
     <DaoProvider key={daoid}>
       <DaoRouter />
-      <DaoScopedModals />
+      {/* <DaoScopedModals /> */}
     </DaoProvider>
   );
 };

@@ -32,6 +32,7 @@ import { MINION_TYPES } from './proposalUtils';
 import { proposalResolver, daoResolver } from './resolvers';
 import { calcTotalUSD, fetchTokenData } from './tokenValue';
 import { UBERHAUS_DATA } from './uberhaus';
+import { PROPOSAL_LIST } from '../graphQL/proposal-queries';
 
 const SNAPSHOT_ENDPOINT = 'https://hub.snapshot.org/graphql';
 
@@ -318,127 +319,29 @@ const completeQueries = {
         },
       });
 
-      const daoTokenBalances = await graphQuery({
+      console.log('graphOverview', graphOverview);
+
+      setter({
+        ...graphOverview.dao,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  },
+  async getProposals(args, setter) {
+    try {
+      const graphProposals = await graphFetchAll({
         endpoint: getGraphEndpoint(args.chainID, 'subgraph_url'),
-        query: HOME_DAO_TOKENS,
+        query: PROPOSAL_LIST,
+        subfield: 'proposals',
         variables: {
           contractAddr: args.daoID,
         },
       });
 
-      if (setter.setDaoOverview) {
-        setter.setDaoOverview({
-          ...graphOverview.moloch,
-          tokenBalances: daoTokenBalances.tokenBalances,
-        });
-      }
+      console.log('graphProposals', graphProposals);
 
-      if (setter.setDaoVaults) {
-        const minionAddresses = graphOverview.moloch.minions.map(
-          minion => minion.minionAddress,
-        );
-
-        const prices = await fetchTokenData();
-        const vaultApiData = await fetchApiVaultData(
-          supportedChains[args.chainID].network,
-          minionAddresses,
-        );
-        const vaultData = await Promise.all(
-          vaultApiData.map(async vault => {
-            if (vault.minionType === MINION_TYPES.SAFE) {
-              try {
-                const minion = graphOverview.moloch.minions.find(
-                  minion => minion.minionAddress === vault.address,
-                );
-                const isMinionModule = await isModuleEnabled(
-                  args.chainID,
-                  vault.safeAddress,
-                  vault.address,
-                );
-                return {
-                  ...vault,
-                  isMinionModule,
-                  minQuorum: minion.minQuorum,
-                };
-              } catch (error) {
-                console.error(error);
-              }
-              return vault;
-            }
-            return vault;
-          }),
-        );
-
-        const balanceData = await fetchBankValues({
-          daoID: args.daoID,
-          chainID: args.chainID,
-        });
-
-        const guildBank = {
-          type: 'treasury',
-          name: 'DAO Treasury',
-          address: args.daoID,
-          currentBalance: '',
-          erc20s: daoTokenBalances.tokenBalances.map(token => {
-            const priceData = prices[token.token.tokenAddress];
-            return {
-              ...token,
-              ...priceData,
-              usd: priceData?.price,
-              totalUSD: calcTotalUSD(
-                token.token.decimals,
-                token.tokenBalance,
-                priceData?.price || 0,
-              ),
-            };
-          }),
-          nfts: [],
-          balanceHistory: balanceData,
-        };
-        setter.setDaoVaults([guildBank, ...vaultData]);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  },
-  async getActivities(args, setter) {
-    try {
-      const metadata = await fetchMetaData(args.daoID);
-
-      const activity = metadata[0]?.boosts?.SPAM_FILTER?.active
-        ? await fetchSpamFilterActivity({
-            ...args,
-            requiredTributeToken:
-              metadata[0].boosts.SPAM_FILTER.metadata.paymentToken,
-            requiredTributeMin:
-              metadata[0].boosts.SPAM_FILTER.metadata.paymentRequested,
-          })
-        : await fetchAllActivity(args);
-
-      const resolvedActivity = {
-        id: args.daoID,
-        rageQuits: activity.rageQuits,
-        proposals: activity.proposals.map(proposal =>
-          proposalResolver(proposal, {
-            status: true,
-            title: true,
-            description: true,
-            link: true,
-            hash: true,
-            proposalType: true,
-          }),
-        ),
-      };
-
-      if (setter.setDaoActivities) {
-        setter.setDaoActivities(resolvedActivity);
-      }
-      if (setter.setDaoProposals) {
-        setter.setDaoProposals(resolvedActivity.proposals);
-      }
-      if (setter.setUberProposals) {
-        setter.setUberProposals(resolvedActivity.proposals);
-      }
+      setter(graphProposals);
     } catch (error) {
       console.error(error);
     }
@@ -454,29 +357,11 @@ const completeQueries = {
         },
       });
 
+      console.log('graphMembers', graphMembers);
+
       setter(graphMembers);
     } catch (error) {
       console.error(error);
-    }
-  },
-  async uberMinionData(args, setter) {
-    if (args.daoID === UBERHAUS_DATA.ADDRESS) {
-      try {
-        const uberMinions = await graphQuery({
-          endpoint: getGraphEndpoint(args.chainID, 'subgraph_url'),
-          query: UBER_MINIONS,
-          variables: {
-            minionType: 'UberHaus minion',
-            molochAddress: args.daoID,
-          },
-        });
-
-        setter(uberMinions?.minions);
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      setter(null);
     }
   },
 };
@@ -521,8 +406,6 @@ export const hubChainQuery = async ({
         query,
         variables,
       });
-
-      console.log('chainData', chainData);
 
       reactSetter(prevState => [
         ...prevState,

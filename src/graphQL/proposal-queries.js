@@ -85,12 +85,55 @@ export const PROPOSALS_LIST_IS_MEMBER = gql`
   }
 `;
 
-export const PROPOSALS_DISCOURSE_TOPIC = gql`
-  query proposals($molochAddress: String!, $createdAt: String!) {
-    proposals(
-      where: { molochAddress: $molochAddress, createdAt_gt: $createdAt }
-    ) {
+export const PROPOSAL_LIST = gql`
+  query proposals($contractAddr: String!) {
+    proposals(where: { dao: $contractAddr }) {
+      id
+      createdAt
+      createdBy
       proposalId
+      prevProposalId
+      proposalDataHash
+      proposalData
+      details
+      title
+      proposalType
+      contentURI
+      contentURIType
+      sponsored
+      selfSponsor
+      sponsor
+      votingPeriod
+      votingStarts
+      votingEnds
+      graceEnds
+      expiration
+      cancelled
+      yesBalance
+      noBalance
+      yesVotes
+      noVotes
+      processed
+      actionFailed
+      passed
+      proposalOffering
+      maxTotalSharesAndLootAtYesVote
+      tributeToken
+      tributeOffered
+      tributeTokenSymbol
+      tributeTokenDecimals
+      tributeEscrowRecipient
+      votes {
+        id
+        createdAt
+        daoAddress
+        approved
+        balance
+        member {
+          id
+          memberAddress
+        }
+      }
     }
   }
 `;

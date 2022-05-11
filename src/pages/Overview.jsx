@@ -35,23 +35,6 @@ const Overview = React.memo(function overview({
                 members={members}
                 daoVaults={daoVaults}
               />
-              {daoMetaData?.servicesUrl ? <ServicesBanner /> : null}
-              {daoMetaData?.tags.includes('haus party favor') ? (
-                <OverviewBanner bannerType='hausPartyFavors' />
-              ) : null}
-            </Box>
-          )}
-          {isMember && (
-            <Box w={['100%', null, null, null, '50%']}>
-              <MemberInfo member={daoMember} hideCopy />
-              <Box mt={6}>
-                <ActivitiesFeed
-                  activities={activities}
-                  limit={3}
-                  hydrateFn={getDaoActivites}
-                  heading='Recent Activity'
-                />
-              </Box>
             </Box>
           )}
         </Flex>
