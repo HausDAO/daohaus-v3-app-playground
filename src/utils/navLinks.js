@@ -12,6 +12,7 @@ import {
   RiRocket2Line,
   RiSearch2Line,
   RiImage2Line,
+  RiTreasureMapLine,
 } from 'react-icons/ri';
 import { FaDiscourse, FaRegHandshake } from 'react-icons/fa';
 
@@ -30,7 +31,7 @@ export const defaultDaoData = [
   { icon: FaRegHandshake, label: 'Allies', path: 'allies' },
 ];
 export const defaultHubData = [
-  { icon: RiSearch2Line, label: 'Hub', path: '/' },
+  { icon: RiTreasureMapLine, label: 'Hub', path: '/' },
   // { icon: RiFireLine, label: 'Summon', path: '/summon' },
   // {
   //   icon: RiQuestionLine,

@@ -16,8 +16,12 @@ const OverviewCard = ({ daoOverview, members }) => {
   const { daochain, daoid } = useParams();
   // const { daoOverview.metaData, customTerms } = useMetaData();
   const [activeMembers, setActiveMembers] = useState(null);
-  const totalShares = utils.commify(daoOverview?.totalShares || 0);
-  const totalLoot = utils.commify(daoOverview?.totalLoot || 0);
+  // const totalShares = utils.commify(daoOverview?.totalShares || 0);
+  const totalShares = utils.formatEther(daoOverview?.totalShares || 0);
+
+  // const totalLoot = utils.commify(daoOverview?.totalLoot || 0);
+  const totalLoot = utils.formatEther(daoOverview?.totalLoot || 0);
+
   const history = useHistory();
 
   useEffect(() => {

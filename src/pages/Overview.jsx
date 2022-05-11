@@ -1,31 +1,24 @@
 import React from 'react';
 import { Box, Flex } from '@chakra-ui/react';
 
-import ActivitiesFeed from '../components/activitiesFeed';
 import MainViewLayout from '../components/mainViewLayout';
-import MemberInfo from '../components/memberInfo';
-import OverviewBanner from '../components/overviewBanner';
+// import MemberInfo from '../components/memberInfo';
 import OverviewCard from '../components/overviewCard';
-import ServicesBanner from '../components/servicesBanner';
-import { getDaoActivites } from '../utils/activities';
 
 const Overview = React.memo(function overview({
   daoOverview,
-  activities,
   isMember,
   members,
-  daoMember,
-  customTerms,
-  daoMetaData,
+  // daoMember,
   daoVaults,
 }) {
   return (
-    <MainViewLayout header='Overview' customTerms={customTerms} isDao>
+    <MainViewLayout header='Overview' isDao>
       <Box w='100%'>
         <Flex wrap='wrap'>
           {overview && (
             <Box
-              w={['100%', null, null, null, '50%']}
+              w={['100%', null, null, null, '100%']}
               pr={[0, null, null, null, 6]}
               mb={6}
             >

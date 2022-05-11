@@ -122,7 +122,6 @@ export const DaoProvider = ({ children }) => {
           overview={daoOverview}
         >
           <TXProvider>{children}</TXProvider>
-          {children}
         </DaoMemberProvider>
       </TokenProvider>
     </DaoContext.Provider>

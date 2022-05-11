@@ -13,7 +13,7 @@ import { useDao } from '../contexts/DaoContext';
 // import { useToken } from '../contexts/TokenContext';
 
 import Layout from '../components/layout';
-// import Members from '../pages/Members';
+import Members from '../pages/Members';
 // import Meta from '../pages/Meta';
 // import MetaAudit from '../pages/MetaAudit';
 import Overview from '../pages/Overview';
@@ -41,9 +41,6 @@ const DaoRouter = () => {
   const dao = {
     daoID: daoid,
     chainID: daochain,
-    // daoMetaData,
-    // daoMember,
-    // customTerms,
     daoProposals,
     daoVaults,
   };
@@ -54,12 +51,9 @@ const DaoRouter = () => {
         <Route exact path={`${path}/`}>
           <Overview
             proposals={daoProposals}
-            // daoMember={daoMember}
-            // isMember={isMember}
             isCorrectNetwork={isCorrectNetwork}
             daoOverview={daoOverview}
             members={daoMembers}
-            // daoMetaData={daoMetaData}
             daoVaults={daoVaults}
           />
         </Route>
@@ -88,17 +82,17 @@ const DaoRouter = () => {
             daoVaults={daoVaults}
           />
         </Route> */}
-        {/* <Route exact path={`${path}/members`}>
+        <Route exact path={`${path}/members`}>
           <Members
             members={daoMembers}
-            activities={daoActivities}
+            // activities={daoActivities}
             overview={daoOverview}
-            daoMember={daoMember}
+            // daoMember={daoMember}
             daoMembers={daoMembers}
-            customTerms={customTerms}
-            daoMetaData={daoMetaData}
+            // customTerms={customTerms}
+            // daoMetaData={daoMetaData}
           />
-        </Route> */}
+        </Route>
         {/* <Route exact path={`${path}/settings`}>
           <Settings
             overview={daoOverview}
