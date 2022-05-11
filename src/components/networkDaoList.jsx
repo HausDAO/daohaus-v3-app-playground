@@ -18,6 +18,7 @@ import {
 import makeBlockie from 'ethereum-blockies-base64';
 
 import { themeImagePath } from '../utils/metadata';
+import { truncateAddr } from '../utils/general';
 
 const LinkForVersion = ({ children, dao, network }) => {
   console.log('network', network);
@@ -78,7 +79,7 @@ const NetworkDaoList = ({ data, network, searchTerm, index }) => {
               whiteSpace: 'nowrap',
             }}
           >
-            {dao.metaData?.name || 'no name'}
+            {dao.metaData?.name || truncateAddr(dao?.id)}
           </Box>
         </LinkForVersion>
       </Box>

@@ -28,9 +28,4 @@ export const membersFilterOptions = [
     value: 'inactive',
     type: 'main',
   },
-  {
-    name: 'Jailed',
-    value: 'jailed',
-    type: 'main',
-  },
 ];

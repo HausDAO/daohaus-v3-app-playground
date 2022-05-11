@@ -9,7 +9,7 @@ import MemberInfoGuts from './memberInfoGuts';
 import UberHausMemberInfoGuts from './uberHausMemberInfoGuts';
 import { getTerm, getTitle } from '../utils/metadata';
 
-const MemberInfo = ({ member, customTerms, hideCopy }) => {
+const MemberInfo = ({ member, hideCopy }) => {
   const { address } = useInjectedProvider();
   const { daoid, daochain } = useParams();
 
@@ -18,8 +18,8 @@ const MemberInfo = ({ member, customTerms, hideCopy }) => {
       {member && (
         <>
           <Flex justify='space-between'>
-            <TextBox size='sm' title={getTitle(customTerms, 'Member')}>
-              {getTerm(customTerms, 'member')} Info
+            <TextBox size='sm' title={'Member'}>
+              {'member'} Info
             </TextBox>
             {member && (
               <TextBox
@@ -37,11 +37,7 @@ const MemberInfo = ({ member, customTerms, hideCopy }) => {
             )}
           </Flex>
           <ContentBox mt={3}>
-            {member.isUberMinion ? (
-              <UberHausMemberInfoGuts member={member} />
-            ) : (
-              <MemberInfoGuts member={member} hideCopy={hideCopy} />
-            )}
+            <MemberInfoGuts member={member} hideCopy={hideCopy} />
           </ContentBox>
         </>
       )}

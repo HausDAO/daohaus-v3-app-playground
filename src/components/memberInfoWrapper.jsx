@@ -5,7 +5,7 @@ import { useOverlay } from '../contexts/OverlayContext';
 import GenericModal from '../modals/genericModal';
 import MemberInfo from './memberInfo';
 
-const MemberInfoWrapper = ({ member, customTerms }) => {
+const MemberInfoWrapper = ({ member }) => {
   const { setGenericModal } = useOverlay();
   const [isDesktop] = useMediaQuery('(min-width: 48em)');
 
@@ -16,10 +16,10 @@ const MemberInfoWrapper = ({ member, customTerms }) => {
   }, [member]);
 
   return isDesktop ? (
-    <MemberInfo member={member} customTerms={customTerms} />
+    <MemberInfo member={member} />
   ) : (
     <GenericModal closeOnOverlayClick modalId='memberInfoModal'>
-      <MemberInfo member={member} customTerms={customTerms} />
+      <MemberInfo member={member} />
     </GenericModal>
   );
 };

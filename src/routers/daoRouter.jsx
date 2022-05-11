@@ -57,6 +57,13 @@ const DaoRouter = () => {
             daoVaults={daoVaults}
           />
         </Route>
+        <Route exact path={`${path}/members`}>
+          <Members
+            members={daoMembers}
+            overview={daoOverview}
+            daoMembers={daoMembers}
+          />
+        </Route>
         {/* <Route exact path={`${path}/proposals`}>
           <Proposals
             proposals={daoActivities?.proposals}
@@ -82,17 +89,7 @@ const DaoRouter = () => {
             daoVaults={daoVaults}
           />
         </Route> */}
-        <Route exact path={`${path}/members`}>
-          <Members
-            members={daoMembers}
-            // activities={daoActivities}
-            overview={daoOverview}
-            // daoMember={daoMember}
-            daoMembers={daoMembers}
-            // customTerms={customTerms}
-            // daoMetaData={daoMetaData}
-          />
-        </Route>
+
         {/* <Route exact path={`${path}/settings`}>
           <Settings
             overview={daoOverview}

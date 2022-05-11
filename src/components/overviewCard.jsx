@@ -11,6 +11,7 @@ import DocLink from './docLink';
 
 import { getActiveMembers } from '../utils/dao';
 import { themeImagePath } from '../utils/metadata';
+import { truncateAddr } from '../utils/general';
 
 const OverviewCard = ({ daoOverview, members }) => {
   const { daochain, daoid } = useParams();
@@ -47,7 +48,7 @@ const OverviewCard = ({ daoOverview, members }) => {
               mr={6}
             />
             <Box fontSize='2xl' fontWeight={700} fontFamily='heading'>
-              {daoOverview?.metaData?.name || '--'}
+              {daoOverview?.metaData?.name || truncateAddr(daoOverview?.id)}
             </Box>
           </Flex>
         </Flex>
@@ -56,7 +57,13 @@ const OverviewCard = ({ daoOverview, members }) => {
             ? daoOverview?.metaData.description
             : '--'}
         </Box>
-        <Flex direction='row' w='100%' justify='space-between' mt={6}>
+        <Flex
+          direction='row'
+          w='100%'
+          justify='space-between'
+          mt={6}
+          flexWrap='wrap'
+        >
           <Box>
             <TextBox size='xs' title={'Members'}>
               {`Active Members`}
@@ -100,10 +107,11 @@ const OverviewCard = ({ daoOverview, members }) => {
             </>
           )}
         </Box> */}
-        <Flex mt={6}>
+        <Flex mt={6} flexWrap='wrap'>
           <Button
             variant='outline'
             mr={6}
+            mb={[6, 0, 0, 0, 0]}
             onClick={() => history.push(`/dao/${daochain}/${daoid}/vaults`)}
             value='bank'
             title={'Bank'}
@@ -112,11 +120,20 @@ const OverviewCard = ({ daoOverview, members }) => {
           </Button>
           <Button
             mr={6}
+            mb={[6, 6, 0, 0, 0]}
             onClick={() => history.push(`/dao/${daochain}/${daoid}/proposals`)}
             value='proposals'
             title={'Proposals'}
           >
             {`View proposals`}
+          </Button>
+          <Button
+            mr={6}
+            onClick={() => history.push(`/dao/${daochain}/${daoid}/members`)}
+            value='members'
+            title={'Members'}
+          >
+            {`View members`}
           </Button>
         </Flex>
       </ContentBox>

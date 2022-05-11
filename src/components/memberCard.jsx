@@ -1,5 +1,6 @@
 import React from 'react';
 import { Flex, Box, Badge } from '@chakra-ui/react';
+import { utils } from 'ethers';
 import { format } from 'date-fns';
 
 import AddressAvatar from './addressAvatar';
@@ -7,8 +8,6 @@ import useBoost from '../hooks/useBoost';
 import StaticAvatar from './staticAvatar';
 
 const MemberCard = ({ member, selectMember, selectedMember }) => {
-  const { isActive } = useBoost();
-
   const handleSelect = () => {
     selectMember(member);
   };
@@ -36,27 +35,9 @@ const MemberCard = ({ member, selectMember, selectedMember }) => {
         justify='space-between'
       >
         <Flex direction='row' justify='space-between' align='center'>
-          {isActive('SPAM_FILTER') ? (
-            <StaticAvatar
-              address={member.memberAddress}
-              avatarImg={null}
-              name={null}
-              hideCopy
-            />
-          ) : (
-            <AddressAvatar
-              addr={member.memberAddress}
-              hideCopy
-              alwaysShowName
-            />
-          )}
-          {member.jailed ? (
-            <Badge variant='solid' colorScheme='red' mr={5} height='100%'>
-              JAILED
-            </Badge>
-          ) : null}
+          <AddressAvatar addr={member.memberAddress} hideCopy alwaysShowName />
 
-          {!member.jailed && member.shares === '0' && member.loot === '0' ? (
+          {member.shares === '0' && member.loot === '0' ? (
             <Badge variant='solid' colorScheme='secondary' mr={5} height='100%'>
               INACTIVE
             </Badge>
@@ -68,14 +49,14 @@ const MemberCard = ({ member, selectMember, selectedMember }) => {
         fontFamily='mono'
         textAlign={['right', null, null, 'center']}
       >
-        {member?.shares || '--'}
+        {utils.formatEther(member?.shares || 0)}
       </Box>
       <Box
         w={['20%', null, null, '15%']}
         fontFamily='mono'
         textAlign={['right', null, null, 'center']}
       >
-        {member?.loot || '--'}
+        {utils.formatEther(member?.loot || 0)}
       </Box>
       <Box d={['none', null, null, 'inline-block']} fontFamily='mono'>
         {format(new Date(+member?.createdAt * 1000), 'MMM. d, yyyy') || '--'}
