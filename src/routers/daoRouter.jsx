@@ -16,11 +16,11 @@ import Layout from '../components/layout';
 import Members from '../pages/Members';
 import Overview from '../pages/Overview';
 import Profile from '../pages/Profile';
+import Settings from '../pages/Settings';
 // import Meta from '../pages/Meta';
 // import MetaAudit from '../pages/MetaAudit';
 // import Proposal from '../pages/Proposal';
 // import Proposals from '../pages/Proposals';
-// import Settings from '../pages/Settings';
 // import Treasury from '../pages/Treasury';
 // import Vaults from '../pages/Vaults';
 
@@ -66,14 +66,24 @@ const DaoRouter = () => {
         </Route>
 
         <Route exact path={`${path}/profile/:userid`}>
-          <Profile
-            members={daoMembers}
+          <Profile members={daoMembers} overview={daoOverview} />
+        </Route>
+
+        <Route exact path={`${path}/settings`}>
+          <Settings
             overview={daoOverview}
-            // daoTokens={currentDaoTokens}
-            // activities={daoActivities}
-            // daoMember={daoMember}
+            // daoMetaData={daoMetaData}
+            // customTerms={customTerms}
           />
         </Route>
+        {/* 
+        <Route exact path={`${path}/settings/meta`}>
+          <Meta
+            daoMetaData={daoMetaData}
+            isMember={isMember}
+            refetchMetaData={refetchMetaData}
+          />
+        </Route> */}
         {/* <Route exact path={`${path}/proposals`}>
           <Proposals
             proposals={daoActivities?.proposals}
@@ -97,21 +107,6 @@ const DaoRouter = () => {
             customTerms={customTerms}
             daoMember={daoMember}
             daoVaults={daoVaults}
-          />
-        </Route> */}
-
-        {/* <Route exact path={`${path}/settings`}>
-          <Settings
-            overview={daoOverview}
-            daoMetaData={daoMetaData}
-            customTerms={customTerms}
-          />
-        </Route>
-        <Route exact path={`${path}/settings/meta`}>
-          <Meta
-            daoMetaData={daoMetaData}
-            isMember={isMember}
-            refetchMetaData={refetchMetaData}
           />
         </Route> */}
 

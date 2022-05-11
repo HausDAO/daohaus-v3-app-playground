@@ -26,6 +26,11 @@ export const HOME_DAO = gql`
       metaData {
         name
       }
+      shaman {
+        shamanAddress
+        permissions
+        createdAt
+      }
     }
   }
 `;

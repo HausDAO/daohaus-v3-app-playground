@@ -1,54 +1,87 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Flex, Icon, Link } from '@chakra-ui/react';
 
 import DaoContractSettings from '../components/daoContractSettings';
 import DaoMetaOverview from '../components/daoMetaOverview';
 import MainViewLayout from '../components/mainViewLayout';
 import TextBox from '../components/TextBox';
-import { fetchTransmutation, getWrapNZap } from '../utils/theGraph';
+import { format } from 'date-fns';
+import AddressAvatar from '../components/addressAvatar';
+import { supportedChains } from '../utils/chain';
+import { RiExternalLinkLine } from 'react-icons/ri';
+import ContentBox from '../components/ContentBox';
 
-const Settings = ({ overview, daoMetaData, customTerms }) => {
+const ShamanCard = ({ shaman, link }) => {
+  return (
+    <Flex h='60px' align='center' justify='space-between'>
+      <Box
+        fontFamily='mono'
+        variant='value'
+        fontSize='sm'
+        as={Link}
+        href={link}
+        target='_blank'
+        rel='noreferrer noopener'
+      >
+        <Flex color='secondary.400' align='center'>
+          <Box>{shaman.shamanAddress}</Box>
+          <Icon as={RiExternalLinkLine} color='secondary.400' mx={2} />
+        </Flex>
+      </Box>
+      <Box
+        w={['25%', null, null, '15%']}
+        fontFamily='mono'
+        textAlign={['right', null, null, 'center']}
+      >
+        Permission Level {shaman.permissions}
+      </Box>
+
+      <Box d={['none', null, null, 'inline-block']} fontFamily='mono'>
+        Created on{' '}
+        {format(new Date(+shaman.createdAt * 1000), 'MMM. d, yyyy') || '--'}
+      </Box>
+    </Flex>
+  );
+};
+
+const Settings = ({ overview }) => {
   const { daochain, daoid } = useParams();
-  const [wrapNZap, setWrapNZap] = useState(null);
-  const [transmutationContract, setTransmutationContract] = useState(null);
-
-  useEffect(() => {
-    const getWNZ = async () => {
-      setWrapNZap(await getWrapNZap(daochain, daoid));
-      const transmutationRes = await fetchTransmutation({
-        chainID: daochain,
-        molochAddress: daoid,
-      });
-
-      if (transmutationRes.transmutations[0]) {
-        setTransmutationContract(
-          transmutationRes.transmutations[0].transmutation,
-        );
-      }
-    };
-    getWNZ();
-  }, [daoid]);
 
   return (
-    <MainViewLayout header='Settings' customTerms={customTerms} isDao>
+    <MainViewLayout header='Settings' isDao>
       <Flex wrap='wrap'>
         <Box
-          w={['100%', null, null, null, '50%']}
+          w={['100%', null, null, null, '100%']}
           pr={[0, null, null, null, 6]}
           pb={6}
         >
           <TextBox size='xs'>Dao Contract Settings</TextBox>
-          <DaoContractSettings
-            overview={overview}
-            customTerms={customTerms}
-            wrapNZap={wrapNZap}
-            transmutationContract={transmutationContract}
-          />
-          <Flex justify='space-between' mt={6}>
-            <TextBox size='xs'>DAO Metadata</TextBox>
-          </Flex>
-          <DaoMetaOverview daoMetaData={daoMetaData} />
+          <DaoContractSettings overview={overview} />
+          {overview?.metaData && (
+            <>
+              <TextBox size='xs'>DAO Metadata</TextBox>
+              <DaoMetaOverview daoMetaData={overview.metaData} />
+            </>
+          )}
+          {overview?.shaman.length > 0 && (
+            <>
+              <TextBox size='xs' mt={2}>
+                Shamans
+              </TextBox>
+              <ContentBox d='flex' w='100%' mt={2} flexDirection='column'>
+                {overview.shaman.map(shaman => {
+                  return (
+                    <ShamanCard
+                      key={shaman.shamanAddress}
+                      shaman={shaman}
+                      link={`${supportedChains[daochain].block_explorer}/address/${shaman.shamanAddress}`}
+                    />
+                  );
+                })}
+              </ContentBox>
+            </>
+          )}
         </Box>
       </Flex>
     </MainViewLayout>

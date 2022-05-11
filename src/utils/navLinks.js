@@ -18,17 +18,11 @@ import { FaDiscourse, FaRegHandshake } from 'react-icons/fa';
 
 // no slash on the path
 export const defaultDaoData = [
+  { icon: RiTreasureMapLine, label: 'Hub', path: '/' },
   { icon: RiBookMarkLine, label: 'Proposals', path: 'proposals' },
   { icon: RiBankLine, label: 'Vaults', path: 'vaults' },
   { icon: RiTeamLine, label: 'Members', path: 'members' },
-  {
-    icon: RiImage2Line,
-    label: 'Gallery',
-    path: 'gallery',
-  },
   { icon: RiSettings3Line, label: 'Settings', path: 'settings' },
-  { icon: RiRocket2Line, label: 'Boosts', path: 'settings/boosts' },
-  { icon: FaRegHandshake, label: 'Allies', path: 'allies' },
 ];
 export const defaultHubData = [
   { icon: RiTreasureMapLine, label: 'Hub', path: '/' },
@@ -42,11 +36,14 @@ export const defaultHubData = [
 
 export const generateDaoLinks = (chainID, daoID, proposals, vaults) => {
   let links = [...defaultDaoData];
-  const hasNfts = vaults.some(v => v.nfts.length);
-  if (!hasNfts) {
-    links = links.filter(link => link.label !== 'Gallery');
-  }
+  // const hasNfts = vaults.some(v => v.nfts.length);
+  // if (!hasNfts) {
+  //   links = links.filter(link => link.label !== 'Gallery');
+  // }
   return links.map(link => {
+    if (link.path === '/') {
+      return { ...link, path: `/` };
+    }
     const path = `/dao/${chainID}/${daoID}/${link.path}`;
     return {
       ...link,

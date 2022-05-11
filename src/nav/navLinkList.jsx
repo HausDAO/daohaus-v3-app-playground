@@ -11,7 +11,8 @@ const NavLinkList = ({ dao, view, toggleNav = null }) => {
   const { address } = useInjectedProvider();
 
   const navLinks =
-    dao?.chainID && dao?.daoID && dao.daoProposals && dao.daoVaults
+    // dao?.chainID && dao?.daoID && dao.daoProposals && dao.daoVaults
+    dao?.chainID && dao?.daoID && dao.daoProposals
       ? generateDaoLinks(
           dao.chainID,
           dao.daoID,

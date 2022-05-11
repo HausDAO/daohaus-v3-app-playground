@@ -12,34 +12,21 @@ import {
   useBreakpointValue,
   Stack,
 } from '@chakra-ui/react';
-import { format } from 'date-fns';
+import { format, formatDuration } from 'date-fns';
+import { utils } from 'ethers';
 
-import { useOverlay } from '../contexts/OverlayContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
-import { formatPeriods, truncateAddr } from '../utils/general';
+import { calcSeconds, formatPeriods, truncateAddr } from '../utils/general';
 import { getTerm, getTitle } from '../utils/metadata';
 import { supportedChains } from '../utils/chain';
 
-const DaoContractSettings = ({
-  overview,
-  customTerms,
-  wrapNZap,
-  transmutationContract,
-}) => {
+const DaoContractSettings = ({ overview }) => {
   const { daochain, daoid } = useParams();
   const daoAddress = useBreakpointValue({
     base: truncateAddr(daoid),
     md: daoid,
   });
-  const { successToast } = useOverlay();
-
-  const copiedToast = () => {
-    successToast({
-      title: 'Copied Wrap-N-Zap address!',
-      description: `ONLY SEND ${supportedChains[daochain].nativeCurrency} TO THIS ADDRESS!`,
-    });
-  };
 
   return (
     <ContentBox d='flex' w='100%' mt={2} flexDirection='column'>
@@ -63,71 +50,73 @@ const DaoContractSettings = ({
             </Box>
           </Skeleton>
         </Flex>
-        {wrapNZap && (
-          <Flex justify='space-between'>
-            <TextBox size='xs'>
-              Unwrapped {supportedChains[daochain].chain} receiver (Wrap-N-Zap)
-            </TextBox>
-            <Box fontFamily='mono' variant='value' fontSize='sm'>
+
+        <Flex justify='space-between'>
+          <TextBox size='xs'>Safe COntract</TextBox>
+          <Skeleton isLoaded={daoid}>
+            <Box
+              fontFamily='mono'
+              variant='value'
+              fontSize='sm'
+              as={Link}
+              href={`${supportedChains[daochain].block_explorer}/address/${overview?.safeAddress}`}
+              target='_blank'
+              rel='noreferrer noopener'
+            >
               <Flex color='secondary.400' align='center'>
-                <Box>{wrapNZap}</Box>
-                <CopyToClipboard
-                  text={wrapNZap}
-                  mx={2}
-                  onCopy={copiedToast}
-                  _hover={{ cursor: 'pointer' }}
-                >
-                  <Icon
-                    as={FaCopy}
-                    color='secondarytransmutationRes.transmutations[0].300'
-                    ml={2}
-                  />
-                </CopyToClipboard>
+                <Box>{overview?.safeAddress}</Box>
+                <Icon as={RiExternalLinkLine} color='secondary.400' mx={2} />
               </Flex>
             </Box>
-          </Flex>
-        )}
-        {transmutationContract && (
-          <Flex justify='space-between'>
-            <TextBox size='xs'>Transmutation Contract</TextBox>
-            <Box fontFamily='mono' variant='value' fontSize='sm'>
+          </Skeleton>
+        </Flex>
+
+        <Flex justify='space-between'>
+          <TextBox size='xs'>Loot Contract</TextBox>
+          <Skeleton isLoaded={daoid}>
+            <Box
+              fontFamily='mono'
+              variant='value'
+              fontSize='sm'
+              as={Link}
+              href={`${supportedChains[daochain].block_explorer}/address/${overview?.lootAddress}`}
+              target='_blank'
+              rel='noreferrer noopener'
+            >
               <Flex color='secondary.400' align='center'>
-                <Box>{transmutationContract}</Box>
-                <CopyToClipboard
-                  text={transmutationContract}
-                  mx={2}
-                  onCopy={copiedToast}
-                  _hover={{ cursor: 'pointer' }}
-                >
-                  <Icon as={FaCopy} color='secondary.300' ml={2} />
-                </CopyToClipboard>
+                <Box>{overview?.lootAddress}</Box>
+                <Icon as={RiExternalLinkLine} color='secondary.400' mx={2} />
               </Flex>
             </Box>
-          </Flex>
-        )}
+          </Skeleton>
+        </Flex>
         <Flex wrap='wrap'>
           <Box as={Stack} w={['100%', null, null, '50%']} spacing={2}>
-            <TextBox size='xs' title={getTitle(customTerms, 'Proposal')}>
-              {`${getTerm(customTerms, 'proposal')} Deposit`}
-            </TextBox>
-            <TextBox variant='value' size='xl'>
-              {overview?.proposalDeposit
-                ? `${overview?.proposalDeposit /
-                    10 ** overview?.depositToken.decimals} ${
-                    overview?.depositToken.symbol
-                  }`
-                : '--'}
+            <TextBox size='xs'>Share Token Name</TextBox>
+            <TextBox variant='value' size='xl' my={2}>
+              {overview?.shareTokenName || '--'}
             </TextBox>
           </Box>
           <Stack spacing={2}>
-            <TextBox size='xs'>Processing Reward</TextBox>
+            <TextBox size='xs'>Share Token Symbol</TextBox>
+            <TextBox variant='value' size='xl' my={2}>
+              {overview?.shareTokenSymbol || '--'}
+            </TextBox>
+          </Stack>
+        </Flex>
+        <Flex wrap='wrap'>
+          <Box as={Stack} w={['100%', null, null, '50%']} spacing={2}>
+            <TextBox size='xs' title={'Proposal'}>
+              {`Required Proposal Offering`}
+            </TextBox>
             <TextBox variant='value' size='xl'>
-              {overview?.processingReward
-                ? `${overview.processingReward /
-                    10 ** overview?.depositToken.decimals} ${
-                    overview.depositToken.symbol
-                  }`
-                : '--'}
+              {utils.formatEther(overview?.proposalDeposit || 0)} shares
+            </TextBox>
+          </Box>
+          <Stack spacing={2}>
+            <TextBox size='xs'>Self-Sponsor Threshold</TextBox>
+            <TextBox variant='value' size='xl'>
+              {utils.formatEther(overview?.sponsorThreshold || 0)} shares
             </TextBox>
           </Stack>
         </Flex>
@@ -135,23 +124,27 @@ const DaoContractSettings = ({
           <Box as={Stack} w={['100%', null, null, '50%']} spacing={2}>
             <TextBox size='xs'>Voting Period</TextBox>
             <TextBox variant='value' size='xl' my={2}>
-              {overview
-                ? `${formatPeriods(
-                    +overview?.votingPeriodLength,
-                    +overview?.periodDuration,
-                  )}`
-                : '--'}
+              {Number((overview?.votingPeriod || 0) / 60).toFixed(2)} minutes
             </TextBox>
           </Box>
           <Stack spacing={2}>
             <TextBox size='xs'>Grace Period</TextBox>
-            <TextBox variant='value' size='xl'>
-              {overview
-                ? `${formatPeriods(
-                    +overview.gracePeriodLength,
-                    +overview.periodDuration,
-                  )}`
-                : '--'}
+            <TextBox variant='value' size='xl' my={2}>
+              {Number((overview?.gracePeriod || 0) / 60).toFixed(2)} minutes
+            </TextBox>
+          </Stack>
+        </Flex>
+        <Flex wrap='wrap'>
+          <Box as={Stack} w={['100%', null, null, '50%']} spacing={2}>
+            <TextBox size='xs'>Quorum Percent</TextBox>
+            <TextBox variant='value' size='xl' my={2}>
+              {Number((overview?.quorumPercent * 100).toFixed(2))} %
+            </TextBox>
+          </Box>
+          <Stack spacing={2}>
+            <TextBox size='xs'>Min Retention Percent</TextBox>
+            <TextBox variant='value' size='xl' my={2}>
+              {Number((overview?.minRetentionPercent * 100).toFixed(2))} %
             </TextBox>
           </Stack>
         </Flex>
@@ -160,21 +153,10 @@ const DaoContractSettings = ({
             <TextBox size='xs'>Summoned</TextBox>
             <TextBox variant='value' size='xl'>
               {overview
-                ? format(
-                    new Date(+overview?.summoningTime * 1000),
-                    'MMMM d, yyyy',
-                  )
+                ? format(new Date(+overview?.createdAt * 1000), 'MMMM d, yyyy')
                 : '--'}
             </TextBox>
           </Box>
-          <Stack spacing={2}>
-            <TextBox size='xs'>Maximum Proposal Velocity</TextBox>
-            <TextBox variant='value' size='xl'>
-              {overview?.periodDuration
-                ? `${86400 / +overview?.periodDuration} per day`
-                : '--'}
-            </TextBox>
-          </Stack>
         </Flex>
       </Stack>
     </ContentBox>

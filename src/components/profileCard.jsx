@@ -73,7 +73,6 @@ const ProfileCard = ({
     return profile?.name ? profile.name : truncateAddr(userid);
   };
 
-  console.log(memberEntity);
   return (
     <ContentBox>
       {userid ? (

@@ -24,8 +24,6 @@ const NetworkList = () => {
     setSortedDaos({ networkDaos, count });
   }, [userHubDaos]);
 
-  console.log('sortedDaos', sortedDaos);
-
   const handleChange = event => {
     setSearchTerm(event.target.value);
   };
