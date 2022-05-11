@@ -1,7 +1,5 @@
 # DAOhaus V3 Playground
 
-Junk app or messing with v3.
-
 ---
 
 ## Development
